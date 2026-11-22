@@ -953,43 +953,6 @@ def dashboard():
 @app.route("/add_property", methods=["GET", "POST"])
 @login_required
 def add_property():
-    form = {"whatsapp_number": g.user.phone or ""}
-    if request.method == "POST":
-        form = request.form.to_dict()
-        is_admin = bool(g.user.is_admin)
-        data, errors = parse_property_form(request.form, is_admin)
-        files = [f for f in request.files.getlist("images") if f and f.filename]
-        if len(files) > MAX_IMAGES:
-            errors.append("e_images_count")
-        urls = []
-        if not errors:
-            try:
-                urls = save_images(files)
-            except ImageError as e:
-                errors.append(e.key)
-        if errors:
-            for e in errors:
-                flash_t(e)
-        else:
-            prop = Property(owner_id=g.user.id,
-                            status="approved" if is_admin else "pending",
-                            is_verified=data["is_verified"])
-            _apply_form(prop, data)
-            prop.images = [Image(image_url=u) for u in urls]
-            db.session.add(prop)
-            commit_or_cleanup(urls)
-            flash_t("flash_added" if is_admin else "flash_added_pending", "success")
-            return redirect(url_for("dashboard"))
-    return render_template("add_property.html", form=form, editing=False,
-                           images=[], pid=None)
-
-
-@app.route("/add", methods=["GET", "POST"])
-@app.route("/add/", methods=["GET", "POST"])
-@app.route("/add-property", methods=["GET", "POST"])
-@app.route("/add_property", methods=["GET", "POST"])
-@login_required
-def add_property():
     form = {"whatsapp_number": g.user.phone or "", "owner_name": g.user.name or ""}
     if request.method == "POST":
         form = request.form.to_dict()
