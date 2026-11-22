@@ -15,6 +15,22 @@
     <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
 
     <section class="bg-white rounded-xl shadow p-5 space-y-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-semibold mb-1">{{ t('owner') }} *</label>
+          <input name="owner_name" required maxlength="120" value="{{ form.get('owner_name', current_user.name or '') }}"
+                 class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1">Role *</label>
+          <select name="owner_role" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+            {% for r in ['Owner', 'Agent', 'Broker', 'Family'] %}
+              <option value="{{ r }}" {{ 'selected' if form.get('owner_role', 'Owner') == r }}>{{ r }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
       <div>
         <label class="block text-sm font-semibold mb-1">{{ t('f_title') }} *</label>
         <input name="title" required maxlength="120" value="{{ form.get('title', '') }}"
@@ -95,7 +111,7 @@
       <div>
         <label class="block text-sm font-semibold mb-1">Ownership Document (PDF / Image)</label>
         <input type="file" id="ownership_doc" name="ownership_doc" accept=".pdf,image/jpeg,image/png,image/webp"
-               class="block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:font-semibold file:text-blue-700">
+               class="block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-amber-50 file:px-4 file:py-2 file:font-semibold file:text-amber-800">
         <p class="text-xs text-slate-400 mt-1">Upload property ownership document (PDF, JPG, PNG, WebP).</p>
       </div>
 
@@ -145,7 +161,6 @@
   const map = L.map('map').setView(CITY_CENTERS[citySel.value] || CENTER, CITY_CENTERS[citySel.value] ? 13 : ZOOM);
   addBaseLayers(map);
 
-  // Neighbourhood suggestions + map position follow the selected city
   function updateAreas() {
     const names = AREAS[citySel.value] || [];
     document.getElementById('hoods').innerHTML = names.map(n => '<option value="' + n.replace(/"/g, '&quot;') + '">').join('');
@@ -153,7 +168,7 @@
   citySel.addEventListener('change', () => {
     updateAreas();
     const c = CITY_CENTERS[citySel.value];
-    if (c && !marker) map.setView(c, 13);          // don't jump away if a pin is already placed
+    if (c && !marker) map.setView(c, 13);
   });
   updateAreas();
 
@@ -181,7 +196,6 @@
   lngEl.addEventListener('change', fromInputs);
   fromInputs();
 
-  // ---- multiple photo picker: preview + client-side checks ----
   const imgInput = document.getElementById('images');
   const preview = document.getElementById('preview');
   const pickedCount = document.getElementById('pickedCount');
