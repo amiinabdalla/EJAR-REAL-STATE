@@ -239,7 +239,6 @@ def _relax_postgres_checks():
         db.session.rollback()
         print("[warn] could not relax category constraint:", exc)
 
-
 def _ensure_columns():
     """Add columns introduced after the first release (existing rows -> Bosaso)."""
     cols = {c["name"] for c in inspect(db.engine).get_columns("properties")}
@@ -248,6 +247,11 @@ def _ensure_columns():
             "ALTER TABLE properties ADD COLUMN city VARCHAR(40) NOT NULL DEFAULT 'Bosaso'"))
         db.session.commit()
         print("[info] Added 'city' column: existing listings were set to Bosaso.")
+    if "reject_reason" not in cols:
+        db.session.execute(text(
+            "ALTER TABLE properties ADD COLUMN reject_reason VARCHAR(300)"))
+        db.session.commit()
+        print("[info] Added 'reject_reason' column.")
 
 
 def _ensure_admin():
@@ -1108,8 +1112,11 @@ def admin_action(pid):
     action = request.form.get("action")
     if action == "approve":
         prop.status = "approved"
+        prop.reject_reason = None
     elif action == "reject":
         prop.status = "rejected"
+        reason = (request.form.get("reason") or "").strip()
+        prop.reject_reason = reason[:300] if reason else None
     elif action == "verify":
         prop.is_verified = True
     elif action == "unverify":
