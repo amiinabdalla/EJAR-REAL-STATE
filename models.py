@@ -75,6 +75,7 @@ class Property(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="SET NULL"))
     # moderation state: pending | approved | rejected | closed
     status = db.Column(db.String(10), nullable=False, default="approved")
+    reject_reason = db.Column(db.String(300), nullable=True)
     owner_name = db.Column(db.String(120), nullable=True)
     owner_role = db.Column(db.String(30), nullable=False, default="Owner", server_default="Owner")
     ownership_doc = db.Column(db.String(255), nullable=True)
@@ -116,6 +117,7 @@ class Property(db.Model):
             data["owner_name"] = self.owner_name or (self.owner.name if self.owner else None)
             data["owner_role"] = self.owner_role or "Owner"
             data["ownership_doc"] = self.ownership_doc
+            data["reject_reason"] = self.reject_reason
         return data
 
 
