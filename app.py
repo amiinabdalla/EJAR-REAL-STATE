@@ -982,6 +982,49 @@ def add_property():
                            images=[], pid=None)
 
 
+@app.route("/add", methods=["GET", "POST"])
+@app.route("/add/", methods=["GET", "POST"])
+@app.route("/add-property", methods=["GET", "POST"])
+@app.route("/add_property", methods=["GET", "POST"])
+@login_required
+def add_property():
+    form = {"whatsapp_number": g.user.phone or "", "owner_name": g.user.name or ""}
+    if request.method == "POST":
+        form = request.form.to_dict()
+        is_admin = bool(g.user.is_admin)
+        data, errors = parse_property_form(request.form, is_admin)
+        files = [f for f in request.files.getlist("images") if f and f.filename]
+        doc_file = request.files.get("ownership_doc")
+        if len(files) > MAX_IMAGES:
+            errors.append("e_images_count")
+        urls = []
+        doc_ref = None
+        if not errors:
+            try:
+                urls = save_images(files)
+                doc_ref = save_ownership_doc(doc_file)
+            except ImageError as e:
+                for u in urls:
+                    remove_upload(u)
+                errors.append(e.key)
+        if errors:
+            for e in errors:
+                flash_t(e)
+        else:
+            prop = Property(owner_id=g.user.id,
+                            status="approved" if is_admin else "pending",
+                            is_verified=data["is_verified"],
+                            ownership_doc=doc_ref)
+            _apply_form(prop, data)
+            prop.images = [Image(image_url=u) for u in urls]
+            db.session.add(prop)
+            commit_or_cleanup(urls)
+            flash_t("flash_added" if is_admin else "flash_added_pending", "success")
+            return redirect(url_for("dashboard"))
+    return render_template("add_property.html", form=form, editing=False,
+                           images=[], pid=None)
+
+
 @app.route("/edit/<int:pid>", methods=["GET", "POST"])
 @login_required
 def edit_property(pid):
@@ -997,33 +1040,43 @@ def edit_property(pid):
         to_delete = {int(raw) for raw in request.form.getlist("delete_image")
                      if raw.isdigit() and int(raw) in existing}
         files = [f for f in request.files.getlist("images") if f and f.filename]
+        doc_file = request.files.get("ownership_doc")
         if len(existing) - len(to_delete) + len(files) > MAX_IMAGES:
             errors.append("e_images_count")
         urls = []
+        new_doc_ref = None
         if not errors:
             try:
                 urls = save_images(files)
+                new_doc_ref = save_ownership_doc(doc_file)
             except ImageError as e:
+                for u in urls:
+                    remove_upload(u)
                 errors.append(e.key)
         if errors:
             for e in errors:
                 flash_t(e)
         else:
             _apply_form(prop, data)
+            old_doc = prop.ownership_doc
+            if new_doc_ref:
+                prop.ownership_doc = new_doc_ref
             if is_admin:
                 prop.is_verified = data["is_verified"]
             elif prop.status != "closed":
-                prop.status = "pending"        # owner edits go back to review
+                prop.status = "pending"
                 prop.is_verified = False
             removed_urls = []
             for img_id in to_delete:
                 removed_urls.append(existing[img_id].image_url)
-                prop.images.remove(existing[img_id])   # delete-orphan removes the row
+                prop.images.remove(existing[img_id])
             for url in urls:
                 prop.images.append(Image(image_url=url))
             commit_or_cleanup(urls)
             for url in removed_urls:
                 remove_upload(url)
+            if new_doc_ref and old_doc:
+                remove_ownership_doc(old_doc)
             flash_t("flash_updated", "success")
             return redirect(url_for("admin") if is_admin else url_for("dashboard"))
     gallery = [{"id": img.id, "url": img.image_url} for img in prop.images]
