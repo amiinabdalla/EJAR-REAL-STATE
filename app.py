@@ -718,6 +718,8 @@ def parse_property_form(form, is_admin):
 def _form_values(prop):
     price = prop.price
     return {
+        "owner_name": prop.owner_name or "",
+        "owner_role": prop.owner_role or "Owner",
         "title": prop.title, "description": prop.description or "",
         "price": int(price) if price == int(price) else price,
         "type": prop.type, "category": prop.category, "city": prop.city,
