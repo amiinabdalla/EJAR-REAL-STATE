@@ -25,12 +25,24 @@
       · {{ t('owner') }}: {{ p.owner_name or '—' }}{% if p.owner_role %} ({{ p.owner_role }}){% endif %}{% if p.owner_email %} ({{ p.owner_email }}){% endif %}
       · <a class="text-blue-700" href="https://wa.me/{{ p.whatsapp_number }}" target="_blank" rel="noopener">+{{ p.whatsapp_number }}</a>
     </p>
+
+    {% if p.status == 'rejected' and p.reject_reason %}
+      <p class="text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-1.5 mt-2">
+        <strong>Sababta diidmada:</strong> {{ p.reject_reason }}
+      </p>
+    {% endif %}
+
     <div class="flex flex-wrap gap-2 mt-3 text-sm">
       {% if p.status != 'approved' %}
         {{ post_btn(url_for('admin_action', pid=p.id), t('act_approve'), 'px-3 py-1.5 rounded-lg bg-green-600 text-white font-semibold', '', 'action', 'approve') }}
       {% endif %}
       {% if p.status != 'rejected' %}
-        {{ post_btn(url_for('admin_action', pid=p.id), t('act_reject'), 'px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50', '', 'action', 'reject') }}
+        <form method="post" action="{{ url_for('admin_action', pid=p.id) }}" class="inline" onsubmit="return askRejectReason(this)">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+          <input type="hidden" name="action" value="reject">
+          <input type="hidden" name="reason" value="">
+          <button type="submit" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50">{{ t('act_reject') }}</button>
+        </form>
       {% endif %}
       {% if p.is_verified %}
         {{ post_btn(url_for('admin_action', pid=p.id), t('act_unverify'), 'px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-50', '', 'action', 'unverify') }}
@@ -107,6 +119,13 @@
 </main>
 
 <script>
+  function askRejectReason(form) {
+    const r = prompt("Qor sababta loo diiday (tusaale: Waraaqda lahaanshaha ayaa maqan):", "");
+    if (r === null) return false;
+    form.querySelector('input[name="reason"]').value = r.trim();
+    return true;
+  }
+
   const searchEl = document.getElementById('adminSearch');
   const filterEl = document.getElementById('adminFilter');
   function applyAdminFilter() {
