@@ -12,8 +12,9 @@
     </div>
   {% else %}
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    {% for p in props %}
+{% for p in props %}
     {% set wa_text = t('wa_message', id=p.id, brand=brand) %}
+    {% set ejar_wa = admin_whatsapp or '252904661683' %}
     <article data-card class="bg-white rounded-xl shadow overflow-hidden flex flex-col">
       <div class="relative">
         <a href="{{ url_for('property_detail', pid=p.id) }}">
@@ -37,7 +38,7 @@
         <p class="text-blue-700 font-bold text-lg mt-1">${{ '{:,.0f}'.format(p.price) }}{% if p.type == 'Rent' %} {{ t('per_month') }}{% endif %}</p>
         <p class="text-sm text-slate-500">📍 {{ p.neighborhood }}, {{ p.city }} · ID #{{ p.id }}</p>
         <div class="mt-auto pt-3">
-          <a href="https://wa.me/{{ p.whatsapp_number }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
+          <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
              class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg px-4 py-2.5 text-sm">💬 {{ t('contact_wa') }}</a>
         </div>
       </div>
