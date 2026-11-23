@@ -2,6 +2,7 @@
 {% from "_macros.html" import heart %}
 {% set wa_text = t('wa_message', id=p.id, brand=brand) %}
 {% set price_text = '$' ~ '{:,.0f}'.format(p.price) ~ ((' ' ~ t('per_month')) if p.type == 'Rent' else '') %}
+{% set ejar_wa = admin_whatsapp or '252904661683' %}
 
 {% block title %}{{ p.title }} – {{ brand }}{% endblock %}
 {% block meta_desc %}{{ price_text }} · {{ p.neighborhood }}, {{ p.city }} · {{ (p.description or '')[:140] }}{% endblock %}
@@ -123,25 +124,21 @@
         <p class="text-2xl font-extrabold text-blue-700 mt-2">{{ price_text }}</p>
         <p class="text-sm text-slate-500 mt-1">📍 {{ p.neighborhood }}, {{ p.city }} · ID #{{ p.id }}</p>
 
-        <!-- Dynamic WhatsApp: property ID is inside the pre-filled text -->
-        <a href="https://wa.me/{{ p.whatsapp_number }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
+        <!-- Contact goes to EJAR instead of exposing the owner's personal WhatsApp -->
+        <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
            class="mt-5 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg px-4 py-3">
-          💬 {{ t('wa_owner') }}
+          💬 Contact {{ brand }}
         </a>
-        {% if admin_whatsapp %}
-          <a href="https://wa.me/{{ admin_whatsapp }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
-             class="mt-2 flex items-center justify-center gap-2 border border-green-500 text-green-700 hover:bg-green-50 font-semibold rounded-lg px-4 py-2.5 text-sm">
-            🏢 {{ t('wa_office', brand=brand) }}
-          </a>
-        {% endif %}
+        <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
+           class="mt-2 flex items-center justify-center gap-2 border border-green-500 text-green-700 hover:bg-green-50 font-semibold rounded-lg px-4 py-2.5 text-sm">
+          🏢 {{ t('wa_office', brand=brand) }}
+        </a>
 
         <button type="button" id="shareBtn"
                 class="mt-3 w-full border border-slate-300 rounded-lg px-4 py-2 text-sm hover:bg-slate-50">🔗 {{ t('share') }}</button>
 
-        {% if admin_whatsapp %}
-          <a href="https://wa.me/{{ admin_whatsapp }}?text={{ t('report_msg', id=p.id)|urlencode }}" target="_blank" rel="noopener"
-             class="mt-3 block text-center text-xs text-slate-400 hover:text-red-600">⚑ {{ t('report') }}</a>
-        {% endif %}
+        <a href="https://wa.me/{{ ejar_wa }}?text={{ t('report_msg', id=p.id)|urlencode }}" target="_blank" rel="noopener"
+           class="mt-3 block text-center text-xs text-slate-400 hover:text-red-600">⚑ {{ t('report') }}</a>
 
         {% if manageable %}
           <div class="mt-5 pt-4 border-t flex flex-wrap gap-2 text-sm">
