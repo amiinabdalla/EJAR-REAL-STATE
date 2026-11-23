@@ -114,8 +114,8 @@
   <!-- Info -->
     <aside class="lg:col-span-2">
       <div class="bg-white rounded-xl shadow p-5 lg:sticky lg:top-4">
-        {% if p.owner_name %}
-          <p class="text-lg font-extrabold text-slate-900 mb-2">👤 {{ p.owner_name }}</p>
+       {% if owner_name %}
+          <p class="text-lg font-extrabold text-slate-900 mb-2">👤 {{ owner_name }}</p>
         {% endif %}
         <div class="flex flex-wrap gap-2 mb-3">
           <span class="bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded">{{ t('type_' ~ p.type) }}</span>
