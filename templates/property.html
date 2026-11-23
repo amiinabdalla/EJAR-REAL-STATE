@@ -117,14 +117,15 @@
         <p class="text-sm text-slate-500 mt-1">📍 {{ p.neighborhood }}, {{ p.city }} · ID #{{ p.id }}</p>
 
         <!-- Contact goes to EJAR instead of exposing the owner's personal WhatsApp -->
-        <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
-           class="mt-5 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg px-4 py-3">
-          💬 Contact {{ brand }}
-        </a>
-        <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
-           class="mt-2 flex items-center justify-center gap-2 border border-green-500 text-green-700 hover:bg-green-50 font-semibold rounded-lg px-4 py-2.5 text-sm">
-          🏢 {{ t('wa_office', brand=brand) }}
-        </a>
+       <!-- Contact goes to EJAR instead of exposing the owner's personal WhatsApp -->
+      <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
+         class="mt-5 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg px-4 py-3">
+        💬 Contact EJAR
+      </a>
+      <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
+         class="mt-2 flex items-center justify-center gap-2 border border-green-500 text-green-700 hover:bg-green-50 font-semibold rounded-lg px-4 py-2.5 text-sm">
+        🏢 Ask the EJAR office
+      </a>
 
         <button type="button" id="shareBtn"
                 class="mt-3 w-full border border-slate-300 rounded-lg px-4 py-2 text-sm hover:bg-slate-50">🔗 {{ t('share') }}</button>
