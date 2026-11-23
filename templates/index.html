@@ -111,7 +111,7 @@ const EJAR_WA = '252904661683';
     const text = T.wa_message.replace('{brand}', () => BRAND).replace('{id}', () => p.id);
     return 'https://wa.me/' + EJAR_WA + '?text=' + encodeURIComponent(text);
   };
-  };
+  
   const verifiedBadge = '<span class="inline-flex items-center gap-1 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap">' +
     esc(T.verified) + ' 🛡️</span>';
 
