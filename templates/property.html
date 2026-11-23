@@ -111,21 +111,32 @@
     </section>
 
     <!-- Info -->
-   aside
+  <!-- Info -->
+    <aside class="lg:col-span-2">
+      <div class="bg-white rounded-xl shadow p-5 lg:sticky lg:top-4">
+        {% if p.owner_name %}
+          <p class="text-lg font-extrabold text-slate-900 mb-2">👤 {{ p.owner_name }}</p>
+        {% endif %}
+        <div class="flex flex-wrap gap-2 mb-3">
+          <span class="bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded">{{ t('type_' ~ p.type) }}</span>
+          <span class="bg-slate-100 text-slate-700 text-xs font-semibold px-2 py-1 rounded">{{ t('cat_' ~ p.category) }}</span>
+          {% if p.is_verified %}
+            <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded">{{ t('verified') }} 🛡️</span>
+          {% endif %}
+        </div>
         <h1 class="text-xl font-bold leading-snug">{{ p.title }}</h1>
         <p class="text-2xl font-extrabold text-blue-700 mt-2">{{ price_text }}</p>
         <p class="text-sm text-slate-500 mt-1">📍 {{ p.neighborhood }}, {{ p.city }} · ID #{{ p.id }}</p>
 
         <!-- Contact goes to EJAR instead of exposing the owner's personal WhatsApp -->
-       <!-- Contact goes to EJAR instead of exposing the owner's personal WhatsApp -->
-      <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
-         class="mt-5 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg px-4 py-3">
-        💬 Contact EJAR
-      </a>
-      <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
-         class="mt-2 flex items-center justify-center gap-2 border border-green-500 text-green-700 hover:bg-green-50 font-semibold rounded-lg px-4 py-2.5 text-sm">
-        🏢 Ask the EJAR office
-      </a>
+        <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
+           class="mt-5 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg px-4 py-3">
+          💬 Contact EJAR
+        </a>
+        <a href="https://wa.me/{{ ejar_wa }}?text={{ wa_text|urlencode }}" target="_blank" rel="noopener"
+           class="mt-2 flex items-center justify-center gap-2 border border-green-500 text-green-700 hover:bg-green-50 font-semibold rounded-lg px-4 py-2.5 text-sm">
+          🏢 Ask the EJAR office
+        </a>
 
         <button type="button" id="shareBtn"
                 class="mt-3 w-full border border-slate-300 rounded-lg px-4 py-2 text-sm hover:bg-slate-50">🔗 {{ t('share') }}</button>
