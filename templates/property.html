@@ -111,15 +111,7 @@
     </section>
 
     <!-- Info -->
-    <aside class="lg:col-span-2">
-      <div class="bg-white rounded-xl shadow p-5 lg:sticky lg:top-4">
-        <div class="flex flex-wrap gap-2 mb-3">
-          <span class="bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded">{{ t('type_' ~ p.type) }}</span>
-          <span class="bg-slate-100 text-slate-700 text-xs font-semibold px-2 py-1 rounded">{{ t('cat_' ~ p.category) }}</span>
-          {% if p.is_verified %}
-            <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded">{{ t('verified') }} 🛡️</span>
-          {% endif %}
-        </div>
+   aside
         <h1 class="text-xl font-bold leading-snug">{{ p.title }}</h1>
         <p class="text-2xl font-extrabold text-blue-700 mt-2">{{ price_text }}</p>
         <p class="text-sm text-slate-500 mt-1">📍 {{ p.neighborhood }}, {{ p.city }} · ID #{{ p.id }}</p>
