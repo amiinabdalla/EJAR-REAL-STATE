@@ -1,5 +1,5 @@
 """
-Puntland Homes - Real Estate & Land Marketplace (Flask + SQLAlchemy)
+EJAR - Real Estate & Land Marketplace (Flask + SQLAlchemy)
 
 Local:   python app.py                 -> http://127.0.0.1:5000
 Render:  gunicorn app:app --workers 1 --threads 4   (see render.yaml)
@@ -61,14 +61,14 @@ os.makedirs(PRIVATE_DOC_DIR, exist_ok=True)
 ALLOWED_DOC_EXT = {"pdf", "jpg", "jpeg", "png", "webp"}
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-BRAND_NAME = os.environ.get("BRAND_NAME", "Puntland Homes")
+BRAND_NAME = os.environ.get("BRAND_NAME", "EJAR")
 # Optional: official Google Maps layers (needs a billing-enabled key, see README)
 GOOGLE_MAPS_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "").strip()
 # Optional: Google "Maps Embed API" key for the Google Maps tab on listing pages.
 # The Embed API is free with no usage cap, but Google still requires a key from a
 # billing-enabled Cloud project. Restrict the key to the Maps Embed API + your domain.
 GOOGLE_EMBED_KEY = os.environ.get("GOOGLE_EMBED_API_KEY", "").strip()
-ADMIN_WHATSAPP = re.sub(r"\D", "", os.environ.get("ADMIN_WHATSAPP", ""))
+ADMIN_WHATSAPP = re.sub(r"\D", "", os.environ.get("ADMIN_WHATSAPP", "252904661683"))
 
 
 def _database_uri():
