@@ -106,9 +106,11 @@
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const priceLabel = p => '$' + Number(p.price).toLocaleString('en-US') +
     (p.type === 'Rent' ? ' ' + T.per_month : '');
+const EJAR_WA = '252904661683';
   const waLink = p => {
     const text = T.wa_message.replace('{brand}', () => BRAND).replace('{id}', () => p.id);
-    return 'https://wa.me/' + encodeURIComponent(p.whatsapp_number) + '?text=' + encodeURIComponent(text);
+    return 'https://wa.me/' + EJAR_WA + '?text=' + encodeURIComponent(text);
+  };
   };
   const verifiedBadge = '<span class="inline-flex items-center gap-1 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap">' +
     esc(T.verified) + ' 🛡️</span>';
