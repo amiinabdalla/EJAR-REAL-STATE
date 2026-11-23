@@ -761,8 +761,9 @@ def property_detail(pid):
     manageable = can_manage(prop)
     if prop.status != "approved" and not manageable:
         abort(404)
-    return render_template("property.html",
+  return render_template("property.html",
                            p=prop.to_dict(favorite_ids_for(g.user)),
+                           owner_name=prop.owner_name,
                            manageable=manageable,
                            plus_code=plus_code(prop.latitude, prop.longitude))
 
