@@ -93,4 +93,33 @@
         <h4 class="text-white font-semibold mb-3">Legal & Terms</h4>
         <ul class="space-y-2">
           <li><a href="#terms" class="text-blue-100/85 hover:text-white transition">Terms & Conditions</a></li>
-          <li><a
+          <li><a href="#privacy" class="text-blue-100/85 hover:text-white transition">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h4 class="text-white font-semibold mb-3">Xiriirka EJAR</h4>
+        <ul class="space-y-2 text-blue-100/90">
+          <li>📍 Bosaso, Puntland, Somalia</li>
+          <li>
+            💬 <a href="https://wa.me/252904661683" target="_blank" rel="noopener" class="text-green-300 hover:text-green-200 hover:underline font-medium">
+              WhatsApp: +252 904 661 683
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom Copyright -->
+    <div class="border-t border-white/15 py-4 text-center text-xs text-blue-200/80">
+      © 2026 EJAR · {{ t('footer_note') }}
+    </div>
+  </footer>
+
+  <script>window.FAV_T = {{ {'add': t('fav_add'), 'remove': t('fav_remove')}|tojson }};</script>
+  <script src="{{ url_for('static', filename='favorites.js') }}?v=1"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
